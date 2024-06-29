@@ -1,5 +1,6 @@
 from flask import Flask, request, render_template, jsonify
 from chatbot import generate_response, extract_text_from_response
+import os
 
 app = Flask(__name__)
 
@@ -15,4 +16,4 @@ def enviar_mensagem():
     return jsonify({'resposta': resposta})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
