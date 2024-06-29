@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .chat-container {
+            width: 50%;
+            margin: auto;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .message {
+            margin: 10px 0;
+        }
+        .message.user {
+            text-align: right;
+            color: blue;
+        }
+        .message.bot {
+            text-align: left;
+            color: green;
+        }
+        .input-container {
+            display: flex;
+            margin-top: 20px;
+        }
+        .input-container input {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .input-container button {
+            padding: 10px;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div id="chat" class="chat"></div>
+        <div class="input-container">
+            <input type="text" id="mensagem" placeholder="Digite sua mensagem..." onkeydown="checarEnter(event)">
+            <button onclick="enviarMensagem()">Enviar</button>
+        </div>
+    </div>
+
+    <script>
+        function enviarMensagem() {
+            const mensagem = document.getElementById('mensagem').value;
+            if (!mensagem) return;
+
+            const chat = document.getElementById('chat');
+            const userMessageDiv = document.createElement('div');
+            userMessageDiv.className = 'message user';
+            userMessageDiv.textContent = mensagem;
+            chat.appendChild(userMessageDiv);
+
+            fetch('/enviar_mensagem', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `mensagem=${encodeURIComponent(mensagem)}`,
+            })
+            .then(response => response.json())
+            .then(data => {
+                const botMessageDiv = document.createElement('div');
+                botMessageDiv.className = 'message bot';
+                botMessageDiv.textContent = data.resposta;
+                chat.appendChild(botMessageDiv);
+                document.getElementById('mensagem').value = '';
+                chat.scrollTop = chat.scrollHeight;
+            });
+        }
+
+        function checarEnter(event) {
+            if (event.key === 'Enter') {
+                enviarMensagem();
+            }
+        }
+    </script>
+</body>
+</html>
