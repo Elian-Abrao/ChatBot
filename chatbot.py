@@ -41,7 +41,7 @@ prompt = ChatPromptTemplate.from_messages(
 )
 
 # Inicializar o modelo ChatGroq com a chave de API
-chat = ChatGroq(temperature=0.8, model_name="llama3-70b-8192")
+chat = ChatGroq(temperature=0.8, model_name="llama-3.1-70b-versatile")
 
 # Criar a cadeia LLMChain
 chain = prompt | chat
