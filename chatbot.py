@@ -46,7 +46,7 @@ chat = ChatGroq(temperature=0.8, model_name="llama-3.1-70b-versatile")
 # Criar a cadeia LLMChain
 chain = prompt | chat
 
-def get_top_n_similar_questions(message, documents, n=250):
+def get_top_n_similar_questions(message, documents, n=230):
     similarities = [(key, Levenshtein.distance(message, key)) for key in documents.keys()]
     similarities.sort(key=lambda x: x[1])
     return similarities[:n]
